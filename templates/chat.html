@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="chat-container">
+    <h2>Ask our Virtual Doctor</h2>
+    <form id="chatForm">
+        <input type="text" id="userInput" placeholder="Ask a question..." required>
+        <button type="submit" class="btn">Ask</button>
+    </form>
+    <div id="chatResult"></div>
+</div>
+
+<script>
+    const form = document.getElementById('chatForm');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const userInput = document.getElementById('userInput').value;
+
+        const response = await fetch('/chatbot', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ question: userInput })
+        });
+
+        const data = await response.json();
+        document.getElementById('chatResult').innerHTML = `<h3>Answer:</h3><p>${data.answer}</p>`;
+    });
+</script>
+{% endblock %}
